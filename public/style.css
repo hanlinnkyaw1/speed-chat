@@ -18,7 +18,8 @@ body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 16px;
 	background: var(--light-color);
-	margin: 20px;
+	margin: 0;
+	padding: 0;
 }
 
 ul {
@@ -46,11 +47,12 @@ a {
 	position: relative;
 	display: grid;
 	grid-template-rows: 1fr 7.5fr 1fr;  
-    height: 95vh;
+    height: 100vh;
 	max-width: 800px;
 	background-color:  rgb(220, 220, 220);
-	margin: 10px auto;
 	overflow: hidden;
+	margin: 10px auto;
+	
 }
 
 .chat-main {
@@ -70,8 +72,8 @@ a {
     position: absolute;
 	width: 100%;
 	bottom: 0;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
 	padding: 10px 10px;
 	background-color: rgb(148, 148, 148);
 }
@@ -79,11 +81,11 @@ a {
 .chat-header {
 	background: black;
 	color: #fff;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
 	padding: 15px;
 	display: flex;
 	align-items: center;
+	border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
 	justify-content: space-between;
 }
 
@@ -92,6 +94,7 @@ a {
 	color: #fff;
 	padding: 20px 20px 60px;
 	overflow-y: scroll;	
+	width: 200px;
 }
 
 .chat-sidebar h2 {
@@ -126,12 +129,15 @@ a {
 .nav-bars{
 	display: none;
 	padding: 5px;
-	font-size: 1.5rem;
+	font-size: 2rem;
 	cursor: pointer;
 }
 
 
 @media (max-width: 675px) {
+	.chat-container{
+		margin: 0;
+	}
 	.nav-bars{
 		display: block;
 	}
