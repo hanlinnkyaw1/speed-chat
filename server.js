@@ -1,6 +1,6 @@
+const fs = require("fs")
 const express = require("express");
 const socketio = require("socket.io");
-const path = require("path");
 const http = require("http");
 const formatMessage = require("./utilis/messages.js");
 const {
@@ -15,7 +15,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static("public"))
 
 const botName = "SpeedBot";
 
@@ -23,12 +23,20 @@ io.on("connect", (socket) => {
   socket.on("joinRoom", ({ username, room }) => {
     const user = userJoin(socket.id, username, room);
     socket.emit("socketId", user.id);
-
+    // image
+    socket.on("imageUpload", (data) => {
+      try {
+        io.to(user.room).emit('receivedImage', data);
+      } catch (error) {
+        console.error("Error image:", error);
+       }
+    });  
     
+    
+
     socket.join(user.room);
     socket.on("chatMessage", (msg) => {
-      const user = getCurrentUser(socket.id);
-
+    const user = getCurrentUser(socket.id);
       io.to(user.room).emit("message", formatMessage(user.username, msg));
     });
     socket.broadcast

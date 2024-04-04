@@ -4,7 +4,6 @@
   "description": "real time chat app",
   "main": "server.js",
   "scripts": {
-
     "start": "node server.js"
   },
   "keywords": [],
@@ -12,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
+    "fs": "^0.0.1-security",
     "moment": "^2.30.1",
     "socket.io": "^4.7.4"
   }
