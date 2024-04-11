@@ -1,4 +1,4 @@
-const fs = require("fs")
+
 const express = require("express");
 const socketio = require("socket.io");
 const http = require("http");
@@ -25,8 +25,9 @@ io.on("connect", (socket) => {
     socket.emit("socketId", user.id);
     // image
     socket.on("imageUpload", (data) => {
-      try {
-        io.to(user.room).emit('receivedImage', data);
+      // data.image is a base64 url
+      try {          
+        io.to(user.room).emit('receivedImage', ({sender: data.sender,image: data.img}));    
       } catch (error) {
         console.error("Error image:", error);
        }

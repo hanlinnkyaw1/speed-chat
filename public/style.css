@@ -22,6 +22,7 @@ body {
 	padding: 0;
 }
 
+
 ul {
 	list-style: none;
 }
@@ -53,12 +54,24 @@ a {
 .chat-container {
 	position: relative;
 	display: grid;
-	grid-template-rows: 1fr 10fr 1fr;  
-    height: 80vh;
+	grid-template-rows: 60px 80vh 40px;  
 	max-width: 800px;
 	background-color:  rgb(220, 220, 220);
 	overflow: hidden;
 	margin: 10px auto;
+	max-height: 93vh;
+}
+
+.chat-header {
+	background: black;
+	color: #fff;
+	padding: 15px;
+	display: flex;
+	align-items: center;
+	border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+	justify-content: space-between;
+	
 }
 
 .chat-main {
@@ -66,11 +79,8 @@ a {
 	height: 100%;
 	display: grid;
 	width: 100%;
-	grid-template-columns: 1fr 9fr;
-}
+	grid-template-columns: auto 1fr;
 
-.chat-middle{
-	position: relative;	
 }
 
 .chat-form-container {
@@ -84,16 +94,13 @@ a {
 	border: 1px solid rgb(65, 65, 65);
 }
 
-.chat-header {
-	background: black;
-	color: #fff;
-	padding: 15px;
-	display: flex;
-	align-items: center;
-	border-top-right-radius: 5px;
-	border-top-left-radius: 5px;
-	justify-content: space-between;
+
+.chat-middle{
+	position: relative;	
+	
 }
+
+
 
 .chat-sidebar {
 	background: rgb(51, 50, 50);
@@ -145,7 +152,6 @@ a {
 @media (max-width: 675px) {
 	.chat-container{
 		margin: 0;
-		height: 95vh;
 	}
 	.nav-bars{
 		display: block;
@@ -194,7 +200,8 @@ a {
 	margin-bottom: 15px;
 	align-self: flex-end;
 	min-height: 250px;
-	width: 200px;
+	min-width: 200px;
+
 }
 
 .other-imgUpload{
@@ -203,12 +210,13 @@ a {
 	margin-bottom: 15px;
 	align-self: flex-start;
 	min-height: 250px;
-	width: 200px;
+	min-width: 200px;
+	
 }
 
 .imgUpload img{
 	height: 100%;
-	max-width: 100%;
+    width:  100%;
 }
 
 .chat-messages .other-message{
@@ -368,14 +376,6 @@ a {
     background-color: #888;
 }
 
-footer {
-	text-align: center;
-}
-
-footer p{
-	display: inline;
-	font-family: Georgia, 'Times New Roman', Times, serif;
-}
 
 .numOnline{
 	position: absolute;

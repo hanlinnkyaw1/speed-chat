@@ -5,9 +5,7 @@ const userList = document.getElementById("users");
 const numOnlineUsers = document.getElementById("numOnline")
 const imageUploade = document.getElementById("file-upload")
 
-const currentYear = new Date().getFullYear();
-const date = document.getElementById('date');
-date.textContent = currentYear;
+
 
 
 const { username, room } = Qs.parse(location.search, {
@@ -65,7 +63,9 @@ chatForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const msgInput = document.getElementById("msg");
   const msg = msgInput.value;
-  
+  if (msg ==" ") {
+    return
+  }
   socket.emit("chatMessage", {
     text: msg,
     sender: mySocketId
@@ -104,11 +104,15 @@ function onlineUserCount() {
 // image 
 imageUploade.addEventListener("change", () => {
   const file = imageUploade.files[0];
-  if (file) {
+  
+  // Check if the file size is greater than 1MB
+  if (file && file.size > 1048576) {
+    alert('The file is too large. Please upload a file smaller than 1MB.');
+  } else if (file) {
     const reader = new FileReader();
     reader.onload = (event) => {
       socket.emit("imageUpload", {
-        img:event.target.result,
+        img: event.target.result,
         sender: mySocketId
       });
     };
@@ -116,21 +120,22 @@ imageUploade.addEventListener("change", () => {
   }
 });
 
+
 socket.on("receivedImage", image => {
   imgOutput(image);
   
 })
 
 
-function imgOutput(image) {
-  const imgContainer = document.createElement("div");
-  imgContainer.classList.add("imgUpload");
-  const receiveImg = document.createElement("img");
-  receiveImg.src = image.img;
-  if (image.sender != mySocketId) {
-    imgContainer.classList.add("other-imgUpload")
-  }
-  imgContainer.appendChild(receiveImg);
-  chatMessages.appendChild(imgContainer);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-}
+ function imgOutput(data) {
+   const imgContainer = document.createElement("div");
+   imgContainer.classList.add("imgUpload");
+   const receiveImg = document.createElement("img");  
+   receiveImg.src = data.image;
+   if (data.sender != mySocketId) {
+     imgContainer.classList.add("other-imgUpload")
+   }
+   imgContainer.appendChild(receiveImg);
+   chatMessages.appendChild(imgContainer);
+   chatMessages.scrollTop = chatMessages.scrollHeight;
+ }
