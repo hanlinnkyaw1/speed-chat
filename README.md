@@ -39,7 +39,7 @@ Speed-chat is a simple and fast chat application designed for quick communicatio
 1. Start the development server:
 
    ```bash
-   npm start
+   node server.js
    ```
 
 2. Open your browser and go to [http://localhost:3000](http://localhost:3000) to view the app.
