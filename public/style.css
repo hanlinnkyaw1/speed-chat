@@ -1,12 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
-:root {
-	--dark-color-a: #667aff;
-	--dark-color-b: #7386ff;
-	--light-color: #cecece;
-	--success-color: #5cb85c;
-	--error-color: #d9534f;
-}
 
 * {
 	box-sizing: border-box;
@@ -306,6 +299,41 @@ a {
 	height: 30px;
 	flex: 1;
     outline: none;
+}
+
+/* audio */
+
+.audio{
+	align-self: flex-end;
+	margin: 4px 0px;
+}
+
+.other-audio{
+	align-items: flex-start;
+	margin: 4px 0px;
+}
+
+.audioContainer{
+	position: relative;
+	height: 30px;
+	width: 28px;
+	background-color: #fff;
+	margin-right: 2px;
+	border-radius: 4px;
+}
+
+#startAudioBtn{
+	position: absolute;	
+	font-size: 1.5rem;
+	transform: translateX(30%);	
+}
+
+#stopAudioBtn{
+	position: absolute;
+	display: none;
+	font-size: 1.5rem;
+	transform: translateX(15%);	
+	border-radius: 50%;
 }
 
 /* Join Page */

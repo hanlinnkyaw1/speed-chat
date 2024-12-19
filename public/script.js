@@ -59,18 +59,38 @@ function outputUsers(users) {
     ${users.map((user) => `<li>${user.username}</li>`).join("")}`;
 }
 
+const imgIcon = document.getElementById("imgIcon")
+const audioIcon = document.getElementById("audioIcon")
+const msgInput = document.getElementById("msg");
+
+function updateIcon(){
+  const msg = msgInput.value.trim();
+  if (msg !== "") {
+    audioIcon.style.display = 'none';
+    imgIcon.style.display = 'none';
+  }else{
+    audioIcon.style.display = 'block';
+    imgIcon.style.display = 'block';
+  }
+}
+
+msgInput.addEventListener('input', () => {
+ updateIcon()})
+ 
+
 chatForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const msgInput = document.getElementById("msg");
-  const msg = msgInput.value;
-  if (msg ==" ") {
+  const msg = msgInput.value.trim();
+  if (msg =="") {
     return
   }
   socket.emit("chatMessage", {
     text: msg,
     sender: mySocketId
   });
-  msgInput.value = " ";
+  msgInput.value = "";
+  updateIcon()
 });
 
 function outputMessage(message) {
@@ -139,3 +159,94 @@ socket.on("receivedImage", image => {
    chatMessages.appendChild(imgContainer);
    chatMessages.scrollTop = chatMessages.scrollHeight;
  }
+
+
+//  Audio
+let mediaRecorder;
+let audioChunks = [];
+
+const startAudioBtn = document.getElementById("startAudioBtn");
+const stopAudioBtn = document.getElementById("stopAudioBtn");
+
+startAudioBtn.addEventListener("click", startRecording);
+stopAudioBtn.addEventListener("click", stopRecordingAndSend);
+
+async function startRecording() {
+  try {
+    audioChunks = []; // Reset chunks
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+
+    mediaRecorder.ondataavailable = (evt) => {
+      audioChunks.push(evt.data);
+    };
+
+    mediaRecorder.start(100);
+    console.log("Recording started...");
+    startAudioBtn.style.display = "none";
+    stopAudioBtn.style.display = "block";
+  } catch (err) {
+    console.error("Error starting recording:", err);
+  }
+}
+
+function stopRecordingAndSend() {
+  if (mediaRecorder && mediaRecorder.state !== "inactive") {
+    mediaRecorder.stop();
+    console.log("Recording stopped...");
+  } else {
+    console.warn("MediaRecorder is not active!");
+  }
+
+  startAudioBtn.style.display = "block";
+  stopAudioBtn.style.display = "none";
+
+  const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+  console.log(audioBlob)
+  if (audioBlob.size > 0) {
+    console.log("Audio Blob created successfully:", audioBlob);
+    // Emit the audioBlob and sender info to the server
+    socket.emit("audioFile", {
+      audioBlob: audioBlob,
+      sender: mySocketId,
+    });
+  } else {
+    console.error("Audio Blob is empty. Recording might have failed.");
+  }
+}
+
+// Receiving audio on another client
+socket.on("receivedAudio", (data) => {
+  console.log("Received audio data:", data);
+
+  try {
+    const audioBlob = new Blob([data.audioBlob], { type: "audio/wav" });
+    console.log("Received Audio Blob size:", audioBlob.size);
+
+    if (audioBlob.size > 0) {
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audioContainer = document.createElement("div");
+      const audioElement = document.createElement("audio");
+      audioElement.src = audioUrl;
+      audioElement.controls = true;
+
+      // Apply different classes based on the sender
+      if (data.sender === mySocketId) {
+        audioContainer.classList.add("audio");
+      } else {
+        audioContainer.classList.add("other-audio");
+      }
+
+      audioContainer.appendChild(audioElement);
+      chatMessages.appendChild(audioContainer);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    } else {
+      console.error("Received an empty audio blob.");
+    }
+  } catch (err) {
+    console.error("Error reconstructing received audio blob:", err);
+  }
+});
+
+
+
